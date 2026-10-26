@@ -1,0 +1,172 @@
+{
+  "sample": true,
+  "catatan": "SEMUA data di file ini adalah contoh. Daftar lantai dan ruangan asli FT UIR belum tersedia dan harus diisi oleh pemilik proyek. Struktur: gedung -> floors (lantai) -> rooms (ruangan). Area Sekitar FT memakai satu lantai 'Area luar'.",
+  "layout": {
+    "sample": true,
+    "placeholder": true,
+    "background_image": null,
+    "unit": "percent",
+    "aspect_ratio": "4:3",
+    "catatan": "Posisi area dalam persen terhadap gambar besar. Ganti background_image dan sesuaikan posisi saat foto/denah asli tersedia.",
+    "areas": [
+      { "building_id": "A", "label": "Gedung A", "x": 3, "y": 4, "width": 44, "height": 36, "sample": true },
+      { "building_id": "B", "label": "Gedung B", "x": 53, "y": 4, "width": 44, "height": 36, "sample": true },
+      { "building_id": "C", "label": "Gedung C", "x": 3, "y": 42, "width": 44, "height": 36, "sample": true },
+      { "building_id": "D", "label": "Gedung D", "x": 53, "y": 42, "width": 44, "height": 36, "sample": true },
+      { "building_id": "AREA-FT", "label": "Area Sekitar FT", "x": 3, "y": 80, "width": 94, "height": 16, "sample": true }
+    ]
+  },
+  "buildings": [
+    {
+      "id": "A",
+      "nama": "Gedung A",
+      "sample": true,
+      "floors": [
+        {
+          "id": "A-lantai-1",
+          "nama": "Lantai 1",
+          "sample": true,
+          "rooms": [
+            { "id": "A-101", "nama": "Ruang A.101", "sample": true },
+            { "id": "A-102", "nama": "Ruang A.102", "sample": true },
+            { "id": "A-103", "nama": "Ruang A.103", "sample": true },
+            { "id": "A-104", "nama": "Ruang A.104", "sample": true },
+            { "id": "A-105", "nama": "Ruang A.105", "sample": true },
+            { "id": "A-106", "nama": "Ruang A.106", "sample": true },
+            { "id": "A-107", "nama": "Ruang A.107", "sample": true }
+          ]
+        },
+        {
+          "id": "A-lantai-2",
+          "nama": "Lantai 2",
+          "sample": true,
+          "rooms": [
+            { "id": "A-201", "nama": "Ruang A.201", "sample": true },
+            { "id": "A-202", "nama": "Ruang A.202", "sample": true },
+            { "id": "A-203", "nama": "Ruang A.203", "sample": true },
+            { "id": "A-204", "nama": "Ruang A.204", "sample": true },
+            { "id": "A-205", "nama": "Ruang A.205", "sample": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "nama": "Gedung B",
+      "sample": true,
+      "floors": [
+        {
+          "id": "B-lantai-1",
+          "nama": "Lantai 1",
+          "sample": true,
+          "rooms": [
+            { "id": "B-101", "nama": "Ruang B.101", "sample": true },
+            { "id": "B-102", "nama": "Ruang B.102", "sample": true },
+            { "id": "B-103", "nama": "Ruang B.103", "sample": true },
+            { "id": "B-104", "nama": "Ruang B.104", "sample": true },
+            { "id": "B-105", "nama": "Ruang B.105", "sample": true },
+            { "id": "B-106", "nama": "Ruang B.106", "sample": true },
+            { "id": "B-107", "nama": "Ruang B.107", "sample": true }
+          ]
+        },
+        {
+          "id": "B-lantai-2",
+          "nama": "Lantai 2",
+          "sample": true,
+          "rooms": [
+            { "id": "B-201", "nama": "Ruang B.201", "sample": true },
+            { "id": "B-202", "nama": "Ruang B.202", "sample": true },
+            { "id": "B-203", "nama": "Ruang B.203", "sample": true },
+            { "id": "B-204", "nama": "Ruang B.204", "sample": true },
+            { "id": "B-205", "nama": "Ruang B.205", "sample": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "nama": "Gedung C",
+      "sample": true,
+      "floors": [
+        {
+          "id": "C-lantai-1",
+          "nama": "Lantai 1",
+          "sample": true,
+          "rooms": [
+            { "id": "C-101", "nama": "Ruang C.101", "sample": true },
+            { "id": "C-102", "nama": "Ruang C.102", "sample": true },
+            { "id": "C-103", "nama": "Ruang C.103", "sample": true },
+            { "id": "C-104", "nama": "Ruang C.104", "sample": true },
+            { "id": "C-105", "nama": "Ruang C.105", "sample": true },
+            { "id": "C-106", "nama": "Ruang C.106", "sample": true },
+            { "id": "C-107", "nama": "Ruang C.107", "sample": true }
+          ]
+        },
+        {
+          "id": "C-lantai-2",
+          "nama": "Lantai 2",
+          "sample": true,
+          "rooms": [
+            { "id": "C-201", "nama": "Ruang C.201", "sample": true },
+            { "id": "C-202", "nama": "Ruang C.202", "sample": true },
+            { "id": "C-203", "nama": "Ruang C.203", "sample": true },
+            { "id": "C-204", "nama": "Ruang C.204", "sample": true },
+            { "id": "C-205", "nama": "Ruang C.205", "sample": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "nama": "Gedung D",
+      "sample": true,
+      "floors": [
+        {
+          "id": "D-lantai-1",
+          "nama": "Lantai 1",
+          "sample": true,
+          "rooms": [
+            { "id": "D-101", "nama": "Ruang D.101", "sample": true },
+            { "id": "D-102", "nama": "Ruang D.102", "sample": true },
+            { "id": "D-103", "nama": "Ruang D.103", "sample": true },
+            { "id": "D-104", "nama": "Ruang D.104", "sample": true },
+            { "id": "D-105", "nama": "Ruang D.105", "sample": true },
+            { "id": "D-106", "nama": "Ruang D.106", "sample": true },
+            { "id": "D-107", "nama": "Ruang D.107", "sample": true }
+          ]
+        },
+        {
+          "id": "D-lantai-2",
+          "nama": "Lantai 2",
+          "sample": true,
+          "rooms": [
+            { "id": "D-201", "nama": "Ruang D.201", "sample": true },
+            { "id": "D-202", "nama": "Ruang D.202", "sample": true },
+            { "id": "D-203", "nama": "Ruang D.203", "sample": true },
+            { "id": "D-204", "nama": "Ruang D.204", "sample": true },
+            { "id": "D-205", "nama": "Ruang D.205", "sample": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AREA-FT",
+      "kode": "E",
+      "nama": "Area Sekitar FT",
+      "sample": true,
+      "floors": [
+        {
+          "id": "AREA-FT-luar",
+          "nama": "Area luar",
+          "sample": true,
+          "rooms": [
+            { "id": "AREA-FT-kantin", "nama": "Kantin", "sample": true },
+            { "id": "AREA-FT-musala", "nama": "Musala", "sample": true },
+            { "id": "AREA-FT-toilet-umum", "nama": "Toilet Umum", "sample": true },
+            { "id": "AREA-FT-lapangan", "nama": "Lapangan", "sample": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

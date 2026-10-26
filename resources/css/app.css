@@ -1,0 +1,199 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-serif: Georgia, 'Times New Roman', serif;
+
+    --color-ft-green: #0f5b3a;
+    --color-ft-green-deep: #0a3f28;
+    --color-ft-cream: #f4f1e8;
+    --color-ft-ink: #1c2a24;
+    --color-ft-amber: #d97706;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+html {
+    color-scheme: light;
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
+.map-area[data-selected='true'] {
+    border-color: #d97706;
+    background-color: #fde68a;
+    box-shadow:
+        0 0 0 4px rgb(217 119 6 / 25%),
+        0 18px 30px -20px rgb(15 91 58 / 80%);
+    transform: translateY(-2px);
+}
+
+.dark .map-area[data-selected='true'] {
+    border-color: #fbbf24;
+    background-color: #78350f;
+    color: #fffbeb;
+    box-shadow:
+        0 0 0 4px rgb(251 191 36 / 25%),
+        0 18px 30px -20px rgb(0 0 0 / 90%);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    padding: 0.22rem 0.55rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.status-badge::before {
+    content: '';
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 9999px;
+    background-color: currentColor;
+}
+
+.status-badge[data-status='Baru'] {
+    border-color: #7dd3fc;
+    background-color: #e0f2fe;
+    color: #075985;
+}
+
+.status-badge[data-status='Diproses'] {
+    border-color: #fcd34d;
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge[data-status='Selesai'] {
+    border-color: #6ee7b7;
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.dark .status-badge[data-status='Baru'] {
+    border-color: #0369a1;
+    background-color: #0c4a6e;
+    color: #e0f2fe;
+}
+
+.dark .status-badge[data-status='Diproses'] {
+    border-color: #b45309;
+    background-color: #451a03;
+    color: #fef3c7;
+}
+
+.dark .status-badge[data-status='Selesai'] {
+    border-color: #047857;
+    background-color: #064e3b;
+    color: #ecfdf5;
+}
+
+.field-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-ft-ink);
+}
+
+.dark .field-label {
+    color: #e7e5e4;
+}
+
+.field-control {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    margin-top: 0.375rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #d6d3d1;
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+    color: var(--color-ft-ink);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.field-control:focus-visible {
+    outline: none;
+    border-color: #0f5b3a;
+    box-shadow: 0 0 0 4px rgb(252 211 77 / 70%);
+}
+
+.field-control:disabled,
+.field-control[readonly] {
+    cursor: not-allowed;
+    background-color: #f5f5f4;
+    color: #78716c;
+}
+
+.field-control[readonly] {
+    cursor: default;
+}
+
+.dark .field-control {
+    border-color: #57534e;
+    background-color: #1c1917;
+    color: #f5f5f4;
+}
+
+.dark .field-control:focus-visible {
+    border-color: #6ee7b7;
+    box-shadow: 0 0 0 4px rgb(252 211 77 / 45%);
+}
+
+.dark .field-control:disabled,
+.dark .field-control[readonly] {
+    background-color: #292524;
+    color: #a8a29e;
+}
+
+.field-control[aria-invalid='true'] {
+    border-color: #dc2626;
+}
+
+.dark .field-control[aria-invalid='true'] {
+    border-color: #f87171;
+}
+
+.field-error {
+    margin-top: 0.375rem;
+    color: #b91c1c;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.dark .field-error {
+    color: #fca5a5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}

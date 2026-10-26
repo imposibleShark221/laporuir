@@ -1,0 +1,53 @@
+{
+  "sample": true,
+  "catatan": "Kategori mengikuti PRD bagian 7.3. Daftar fasilitas di bawah adalah contoh dan dapat dikembangkan; data final diisi oleh pemilik proyek.",
+  "categories": [
+    {
+      "id": "listrik-elektronik",
+      "nama": "Listrik & Elektronik",
+      "facilities": [
+        { "id": "tv", "nama": "TV" },
+        { "id": "ac", "nama": "AC" },
+        { "id": "kipas", "nama": "Kipas" },
+        { "id": "infokus", "nama": "Infokus" },
+        { "id": "lampu", "nama": "Lampu" },
+        { "id": "stop-kontak", "nama": "Stop kontak" }
+      ]
+    },
+    {
+      "id": "furniture",
+      "nama": "Furniture",
+      "facilities": [
+        { "id": "meja", "nama": "Meja" },
+        { "id": "kursi", "nama": "Kursi" },
+        { "id": "lemari", "nama": "Lemari" },
+        { "id": "papan-tulis", "nama": "Papan tulis" },
+        { "id": "rak", "nama": "Rak" }
+      ]
+    },
+    {
+      "id": "bangunan",
+      "nama": "Bangunan",
+      "facilities": [
+        { "id": "tembok", "nama": "Tembok" },
+        { "id": "plafon", "nama": "Plafon" },
+        { "id": "lantai", "nama": "Lantai" },
+        { "id": "pintu", "nama": "Pintu" },
+        { "id": "jendela", "nama": "Jendela" },
+        { "id": "atap", "nama": "Atap" }
+      ]
+    },
+    {
+      "id": "fasilitas-umum",
+      "nama": "Fasilitas Umum",
+      "facilities": [
+        { "id": "toilet", "nama": "Toilet" },
+        { "id": "keran-air", "nama": "Keran air" },
+        { "id": "tangga", "nama": "Tangga" },
+        { "id": "tempat-sampah", "nama": "Tempat sampah" },
+        { "id": "jalan-paving", "nama": "Jalan atau paving" },
+        { "id": "pagar", "nama": "Pagar" }
+      ]
+    }
+  ]
+}

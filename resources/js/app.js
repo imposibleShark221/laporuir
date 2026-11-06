@@ -5,19 +5,23 @@ import {
     getActiveReportsByRoomAndFacility,
     getReportsByLocation,
     hasVoted,
+    REPORTS_CHANGED_EVENT,
     voteUrgency,
 } from './lib/reports.js';
 
-const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
-const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
+const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/jpg'];
 const MAX_PHOTO_SIDE = 1280;
 const PHOTO_QUALITY = 0.8;
+const AREA_KODE = 'E';
+const ROOM_OTHER_VALUE = '__lainnya__';
 
 function emptyReportForm() {
     return {
         gedungNama: '',
         lantai: '',
         ruangan: '',
+        ruanganLainnya: '',
         kategori: '',
         fasilitas: '',
         deskripsi: '',
@@ -55,7 +59,7 @@ function resizePhoto(file) {
                 return;
             }
 
-            // Latar putih agar PNG transparan tidak menjadi hitam saat diubah ke JPEG.
+            // Latar putih agar hasil kanvas tetap terang saat diekspor ke JPEG.
             context.fillStyle = '#ffffff';
             context.fillRect(0, 0, width, height);
             context.drawImage(image, 0, 0, width, height);
@@ -82,20 +86,32 @@ window.homePage = (config = {}) => ({
     statusFilter: '',
     categoryFilter: '',
     sortBy: 'urgent',
-    notice: '',
     voteNotice: '',
     submitNotice: '',
     submitNoticeTimer: null,
-    isDark: document.documentElement.classList.contains('dark'),
 
     formOpen: false,
     form: emptyReportForm(),
     formErrors: {},
     submitting: false,
     lastFocused: null,
+    roomOtherValue: ROOM_OTHER_VALUE,
 
     get activeReportCount() {
         return this.reports.filter((report) => report.status !== 'Selesai').length;
+    },
+
+    init() {
+        // Perubahan status dari panel admin (tab/halaman lain) ikut terlihat di sini.
+        window.addEventListener(REPORTS_CHANGED_EVENT, () => this.refreshFromModule());
+    },
+
+    refreshFromModule() {
+        this.reportCounts = getActiveReportCounts();
+
+        if (this.selected) {
+            this.reports = getReportsByLocation(this.selected);
+        }
     },
 
     get visibleReports() {
@@ -129,6 +145,21 @@ window.homePage = (config = {}) => ({
         return `${this.visibleReports.length} laporan ditampilkan untuk ${this.selectedName}.`;
     },
 
+    get isAreaLocation() {
+        return this.selected === AREA_KODE;
+    },
+
+    get selectedRoomName() {
+        return this.form.ruangan === ROOM_OTHER_VALUE
+            ? this.form.ruanganLainnya.trim()
+            : this.form.ruangan;
+    },
+
+    get reportFacility() {
+        // Area Sekitar FT tidak punya pilihan fasilitas; kategori dipakai sebagai isian fasilitas.
+        return this.isAreaLocation ? this.form.kategori : this.form.fasilitas;
+    },
+
     get floorOptions() {
         const building = (this.formConfig.buildings ?? [])
             .find((item) => item.kode === this.selected);
@@ -150,13 +181,13 @@ window.homePage = (config = {}) => ({
     },
 
     get duplicateReports() {
-        if (!this.form.ruangan || !this.form.fasilitas) {
+        if (!this.selectedRoomName || !this.reportFacility) {
             return [];
         }
 
         return getActiveReportsByRoomAndFacility(
-            this.form.ruangan,
-            this.form.fasilitas,
+            this.selectedRoomName,
+            this.reportFacility,
             this.selected,
         );
     },
@@ -167,18 +198,8 @@ window.homePage = (config = {}) => ({
         this.reports = getReportsByLocation(code);
         this.statusFilter = '';
         this.categoryFilter = '';
-        this.notice = '';
         this.voteNotice = '';
         this.hideSubmitNotice();
-    },
-
-    requestReport() {
-        if (!this.selected) {
-            this.notice = 'Pilih lokasi di peta dulu';
-            return;
-        }
-
-        this.openReportForm();
     },
 
     openReportForm() {
@@ -186,11 +207,15 @@ window.homePage = (config = {}) => ({
             return;
         }
 
-        this.notice = '';
         this.lastFocused = document.activeElement;
+        const autoFloor = this.isAreaLocation
+            ? (this.floorOptions[0]?.nama ?? '')
+            : '';
+
         this.form = {
             ...emptyReportForm(),
             gedungNama: this.selectedName,
+            lantai: autoFloor,
         };
         this.formErrors = {};
         this.submitting = false;
@@ -203,7 +228,7 @@ window.homePage = (config = {}) => ({
         }
 
         this.$nextTick(() => {
-            this.focusWhenReady('report-floor');
+            this.focusWhenReady(this.isAreaLocation ? 'report-room' : 'report-floor');
         });
     },
 
@@ -277,6 +302,7 @@ window.homePage = (config = {}) => ({
 
     onFloorChange() {
         this.form.ruangan = '';
+        this.form.ruanganLainnya = '';
         this.clearFormError('lantai');
         this.clearFormError('ruangan');
     },
@@ -307,10 +333,13 @@ window.homePage = (config = {}) => ({
             return;
         }
 
-        if (!ALLOWED_PHOTO_TYPES.includes(file.type)) {
+        const isJpeg = ALLOWED_PHOTO_TYPES.includes(file.type)
+            || (file.type === '' && /\.jpe?g$/i.test(file.name));
+
+        if (!isJpeg) {
             this.formErrors = {
                 ...this.formErrors,
-                foto: 'Pilih foto berformat JPG, PNG, atau WEBP.',
+                foto: 'Pilih foto berformat JPG atau JPEG.',
             };
             this.resetPhotoState();
             input.value = '';
@@ -320,7 +349,7 @@ window.homePage = (config = {}) => ({
         if (file.size > MAX_PHOTO_BYTES) {
             this.formErrors = {
                 ...this.formErrors,
-                foto: 'Ukuran foto maksimal 5 MB sebelum dikecilkan.',
+                foto: 'Ukuran foto maksimal 2 MB.',
             };
             this.resetPhotoState();
             input.value = '';
@@ -360,7 +389,13 @@ window.homePage = (config = {}) => ({
             errors.lantai = 'Pilih lantai lokasi.';
         }
 
-        if (!this.form.ruangan) {
+        if (this.isAreaLocation) {
+            if (!this.form.ruangan) {
+                errors.ruangan = 'Pilih lokasi.';
+            } else if (this.form.ruangan === ROOM_OTHER_VALUE && !this.form.ruanganLainnya.trim()) {
+                errors.ruangan = 'Isi nama lokasi.';
+            }
+        } else if (!this.form.ruangan) {
             errors.ruangan = 'Pilih ruangan.';
         }
 
@@ -368,8 +403,12 @@ window.homePage = (config = {}) => ({
             errors.kategori = 'Pilih kategori fasilitas.';
         }
 
-        if (!this.form.fasilitas) {
+        if (!this.isAreaLocation && !this.form.fasilitas) {
             errors.fasilitas = 'Pilih fasilitas yang bermasalah.';
+        }
+
+        if (this.isAreaLocation && !this.form.deskripsi.trim()) {
+            errors.deskripsi = 'Jelaskan kondisi area sekitar FT.';
         }
 
         if (!this.form.foto) {
@@ -378,12 +417,19 @@ window.homePage = (config = {}) => ({
 
         this.formErrors = errors;
 
-        const fieldOrder = ['lantai', 'ruangan', 'kategori', 'fasilitas', 'foto'];
+        const fieldOrder = [
+            ...(this.isAreaLocation ? [] : ['lantai']),
+            'ruangan',
+            'kategori',
+            ...(this.isAreaLocation ? ['deskripsi'] : ['fasilitas']),
+            'foto',
+        ];
         const focusTargets = {
             lantai: 'report-floor',
-            ruangan: 'report-room',
+            ruangan: this.form.ruangan === ROOM_OTHER_VALUE ? 'report-room-other' : 'report-room',
             kategori: 'report-category',
             fasilitas: 'report-facility',
+            deskripsi: 'report-description',
             foto: 'report-photo',
         };
         const firstInvalid = fieldOrder.find((field) => errors[field]);
@@ -401,9 +447,9 @@ window.homePage = (config = {}) => ({
         const created = createReport({
             gedung: this.selected,
             lantai: this.form.lantai,
-            ruangan: this.form.ruangan,
+            ruangan: this.selectedRoomName,
             kategori: this.form.kategori,
-            fasilitas: this.form.fasilitas,
+            fasilitas: this.reportFacility,
             deskripsi: this.form.deskripsi.trim(),
             foto: this.form.foto,
         });
@@ -412,7 +458,6 @@ window.homePage = (config = {}) => ({
         this.reportCounts = getActiveReportCounts();
         this.statusFilter = '';
         this.categoryFilter = '';
-        this.notice = '';
         this.voteNotice = '';
         this.closeForm(false);
         this.showSubmitNotice('Laporan terkirim');
@@ -504,7 +549,6 @@ window.homePage = (config = {}) => ({
 
         // Muat ulang dari modul agar nilai yang ditampilkan sama dengan data di modul.
         this.reports = getReportsByLocation(this.selected);
-        this.notice = '';
         this.voteNotice = `Terima kasih. Nilai urgensi ${updated.fasilitas} di ${updated.ruangan} sekarang ${updated.nilai_urgensi}.`;
 
         // Kembalikan fokus ke tombol yang sama setelah daftar diurutkan ulang.
@@ -525,16 +569,6 @@ window.homePage = (config = {}) => ({
             month: 'long',
             year: 'numeric',
         }).format(date);
-    },
-
-    toggleTheme() {
-        this.isDark = document.documentElement.classList.toggle('dark');
-
-        try {
-            localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
-        } catch (error) {
-            // Mode tetap berubah untuk sesi ini meskipun preferensi gagal disimpan.
-        }
     },
 });
 

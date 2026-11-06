@@ -7,166 +7,106 @@
     <meta name="theme-color" content="#0F5B3A">
     <title>{{ config('app.name', 'Lapor Fasilitas FT UIR') }}</title>
 
-    <script>
-        (() => {
-            try {
-                const stored = localStorage.getItem('theme');
-                const dark = stored === 'dark'
-                    || (stored === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-                document.documentElement.classList.toggle('dark', dark);
-            } catch (error) {
-                // Mode terang tetap menjadi fallback.
-            }
-        })();
-    </script>
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body
-    class="min-h-screen bg-ft-cream font-sans text-ft-ink antialiased dark:bg-stone-950 dark:text-stone-100"
+    class="page-home min-h-screen bg-ft-paper font-sans text-ft-ink antialiased dark:bg-stone-950 dark:text-stone-100"
     x-data="homePage(@js($formConfig))"
     x-effect="document.body.style.overflow = formOpen ? 'hidden' : ''"
 >
-    <header class="border-b border-emerald-950/10 bg-ft-green text-white shadow-sm dark:border-white/10">
-        <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-            <div class="flex items-start gap-3">
-                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 font-serif text-lg font-bold tracking-tight">
-                    FT
-                </div>
-                <div>
-                    <p class="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-emerald-100/80">
-                        Fakultas Teknik · UIR
-                    </p>
-                    <h1 class="mt-1 font-serif text-xl leading-tight sm:text-2xl">
-                        Lapor Fasilitas Fakultas Teknik UIR
-                    </h1>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-2 self-end sm:self-auto">
-                <button
-                    type="button"
-                    class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/60"
-                    x-on:click="toggleTheme()"
-                    x-bind:aria-label="isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'"
+    <header class="bg-ft-green text-white">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex min-w-0 items-center gap-3">
+                <img
+                    src="{{ asset('images/logo-uir.png') }}"
+                    alt="Logo Universitas Islam Riau"
+                    width="85"
+                    height="98"
+                    class="h-11 w-auto shrink-0 sm:h-12"
                 >
-                    <svg x-show="!isDark" x-cloak class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-                    </svg>
-                    <svg x-show="isDark" x-cloak class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
-                    </svg>
-                </button>
-
-                <button
-                    type="button"
-                    class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-amber-400 px-4 py-2.5 text-sm font-semibold text-emerald-950 shadow-sm transition hover:bg-amber-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-200/70"
-                    x-on:click="requestReport()"
-                >
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"></path>
-                    </svg>
-                    Buat laporan
-                </button>
+                <h1 class="min-w-0 text-sm font-semibold leading-snug tracking-tight sm:text-base">
+                    Lapor Fasilitas Fakultas Teknik UIR
+                </h1>
             </div>
         </div>
     </header>
 
-    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-        <div
-            x-show="notice"
-            x-cloak
-            x-transition.opacity
-            class="mb-5 flex items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-50 px-4 py-3 text-sm text-amber-950 shadow-sm dark:border-amber-400/25 dark:bg-amber-950/40 dark:text-amber-100"
-            role="status"
-            aria-live="polite"
-        >
-            <svg class="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <circle cx="12" cy="12" r="9"></circle>
-                <path stroke-linecap="round" d="M12 8v4M12 16h.01"></path>
-            </svg>
-            <p x-text="notice"></p>
-        </div>
-
-        <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-                <h2 class="font-serif text-2xl text-ft-green dark:text-emerald-300 sm:text-3xl">
-                    Pilih lokasi
-                </h2>
-                <p class="mt-1 max-w-2xl text-sm leading-relaxed text-stone-600 dark:text-stone-400">
-                    Klik salah satu area pada gambar untuk melihat laporan di lokasi itu. Badge pada tiap area menunjukkan jumlah laporan aktif (belum selesai).
-                </p>
-            </div>
-            <span class="inline-flex w-fit items-center rounded-full border border-ft-green/15 bg-white/70 px-3 py-1 text-xs font-medium text-ft-green shadow-sm dark:border-emerald-300/20 dark:bg-stone-900 dark:text-emerald-300">
-                5 area
-            </span>
+    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <div class="mb-6 sm:mb-8">
+            <h2 class="font-serif text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.02] tracking-[-0.03em] text-ft-green dark:text-emerald-300">
+                Pilih lokasi
+            </h2>
+            <p class="mt-3 max-w-2xl text-base leading-relaxed text-stone-600 dark:text-stone-400">
+                Pilih gedung atau area untuk melihat laporan yang sudah ada.
+            </p>
         </div>
 
         <section aria-labelledby="map-heading">
-            <h2 id="map-heading" class="sr-only">Gambar lokasi FT UIR</h2>
+            <h2 id="map-heading" class="sr-only">Lokasi FT UIR</h2>
 
-            <div
-                id="location-map"
-                class="relative w-full overflow-hidden rounded-[2rem] border border-ft-green/15 bg-[#e7e2d4] shadow-inner dark:border-white/10 dark:bg-stone-900"
-                style="aspect-ratio: {{ $aspectRatio }};"
-            >
-                <div class="pointer-events-none absolute inset-0 opacity-40 dark:opacity-30" aria-hidden="true"
-                     style="background-image: radial-gradient(rgba(15, 91, 58, 0.18) 1px, transparent 1px); background-size: 18px 18px;"></div>
-
+            <div class="grid grid-cols-2 gap-2 sm:gap-3">
                 @foreach ($areas as $area)
+                    @php($isArea = $area['building_id'] === 'AREA-FT')
                     <button
                         type="button"
-                        @class([
-                            'map-area group absolute flex min-h-11 items-center overflow-hidden rounded-2xl border-2 p-2.5 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#e7e2d4] dark:focus-visible:ring-offset-stone-900 sm:p-4',
-                            'border-emerald-900/15 bg-emerald-100/80 text-emerald-950 hover:border-emerald-700/50 hover:bg-emerald-200/90 dark:border-emerald-200/20 dark:bg-emerald-900/50 dark:text-emerald-50 dark:hover:bg-emerald-800/70' => $area['building_id'] !== 'AREA-FT',
-                            'border-amber-900/20 bg-amber-100/80 text-amber-950 hover:border-amber-700/50 hover:bg-amber-200/90 dark:border-amber-200/20 dark:bg-amber-900/35 dark:text-amber-50 dark:hover:bg-amber-800/50' => $area['building_id'] === 'AREA-FT',
-                        ])
-                        style="left: {{ $area['x'] }}%; top: {{ $area['y'] }}%; width: {{ $area['width'] }}%; height: {{ $area['height'] }}%;"
+                        class="location-card group relative min-h-11 overflow-hidden text-left {{ $isArea ? 'col-span-2 aspect-[16/5]' : 'aspect-[4/3]' }}"
                         aria-label="Pilih {{ $area['label'] }}"
                         x-bind:aria-label="'Pilih ' + @js($area['label']) + ', ' + (reportCounts[@js($area['kode'])] ?? 0) + ' laporan aktif'"
                         x-bind:aria-pressed="selected === @js($area['kode'])"
                         x-bind:data-selected="selected === @js($area['kode']) ? 'true' : 'false'"
                         x-on:click="select(@js($area['kode']), @js($area['label']))"
                     >
-                        <span class="flex w-full flex-wrap items-center gap-x-2 gap-y-1">
-                            <span
-                                x-show="selected === @js($area['kode'])"
-                                x-cloak
-                                class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ft-green text-white dark:bg-amber-400 dark:text-amber-950"
+                        @if ($area['image'])
+                            <img
+                                src="{{ $area['image'] }}"
+                                alt=""
+                                loading="lazy"
+                                class="location-card__photo absolute inset-0 h-full w-full object-cover"
+                                style="object-position: {{ $area['foto_posisi'] }};"
                                 aria-hidden="true"
                             >
-                                <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"></path>
-                                </svg>
-                            </span>
+                        @else
+                            <span class="location-card__fallback absolute inset-0" aria-hidden="true"></span>
+                        @endif
 
-                            <span class="font-serif text-sm font-semibold leading-tight sm:text-lg">
-                                {{ $area['label'] }}
-                            </span>
+                        <span class="absolute inset-0" style="background-color: rgba(15, 91, 58, 0.18);" aria-hidden="true"></span>
+                        <span class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" aria-hidden="true"></span>
 
+                        <span
+                            class="absolute left-2 top-2 bg-ft-brick px-2 py-1 text-[13px] font-semibold leading-none text-white sm:left-3 sm:top-3"
+                            x-show="selected === @js($area['kode'])"
+                            x-cloak
+                        >
+                            Dipilih
+                        </span>
+
+                        <span class="absolute right-2 top-2 bg-emerald-50 px-2 py-1.5 text-right text-ft-green sm:right-3 sm:top-3">
+                            <span class="block" x-show="(reportCounts[@js($area['kode'])] ?? 0) > 0">
+                                <span class="block text-2xl font-bold leading-none sm:text-3xl" x-text="reportCounts[@js($area['kode'])] ?? 0">0</span>
+                                <span class="mt-1 block text-[13px] leading-none">laporan aktif</span>
+                            </span>
                             <span
-                                class="inline-flex items-center rounded-full border border-black/10 bg-white/60 px-2 py-0.5 text-[0.65rem] font-semibold leading-none dark:border-white/15 dark:bg-black/25"
+                                class="block text-[13px] font-semibold leading-tight"
+                                x-show="(reportCounts[@js($area['kode'])] ?? 0) === 0"
+                                x-cloak
                             >
-                                <span x-text="(reportCounts[@js($area['kode'])] ?? 0) + ' laporan aktif'">0 laporan aktif</span>
+                                Tidak ada laporan aktif
+                            </span>
+                        </span>
+
+                        <span class="absolute inset-x-0 bottom-0 p-2 sm:p-4">
+                            <span class="block font-serif font-extrabold leading-[0.95] tracking-[-0.02em] text-white {{ $isArea ? 'text-[clamp(1.25rem,4vw,2rem)]' : 'text-[clamp(1.5rem,5vw,2.75rem)]' }}">
+                                {{ $area['label'] }}
                             </span>
                         </span>
                     </button>
                 @endforeach
             </div>
 
-            <div class="mt-3 flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-xs text-stone-600 dark:text-stone-400">
-                    Placeholder peta FT UIR — foto/denah asli menyusul.
-                </p>
-                <p class="text-stone-700 dark:text-stone-300" aria-live="polite">
-                    <span class="font-semibold">Lokasi terpilih:</span>
-                    <span x-text="selectedName || 'Belum ada'">Belum ada</span>
-                </p>
-            </div>
-        </section>
-
+            <p class="mt-3 text-right text-[13px] text-stone-600 dark:text-stone-400" aria-live="polite">
+                <span class="font-semibold">Lokasi terpilih:</span>
+                <span x-text="selectedName || 'Belum ada'">Belum ada</span>
+            </p>
         </section>
 
         <section
@@ -178,7 +118,7 @@
             <div class="rounded-[2rem] border border-ft-green/15 bg-white/60 p-4 shadow-sm dark:border-white/10 dark:bg-stone-900/50 sm:p-6">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                        <p class="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ft-green/80 dark:text-emerald-300/90">
+                        <p class="text-[13px] font-semibold tracking-[0.12em] text-ft-green/80 dark:text-emerald-300/90">
                             Daftar laporan
                         </p>
                         <h2 id="reports-heading" class="mt-1 font-serif text-2xl text-ft-green dark:text-emerald-300 sm:text-3xl">
@@ -188,14 +128,14 @@
                             <span x-text="reports.length"></span> laporan
                             <span aria-hidden="true">·</span>
                             <span class="font-semibold" x-text="activeReportCount"></span> aktif
-                            <span class="text-xs text-stone-600 dark:text-stone-400">(status Baru atau Diproses)</span>
+                            <span class="text-[13px] text-stone-600 dark:text-stone-400">(status Baru atau Diproses)</span>
                         </p>
                     </div>
 
                     <button
                         type="button"
-                        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-ft-green px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-ft-green-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 sm:w-auto"
-                        x-on:click="requestReport()"
+                        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-ft-green px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-ft-green-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ft-brick/40 sm:w-auto"
+                        x-on:click="openReportForm()"
                     >
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"></path>
@@ -206,7 +146,7 @@
 
                 <div class="mt-5 grid gap-3 rounded-2xl border border-stone-200/80 bg-stone-50/80 p-3 dark:border-white/10 dark:bg-stone-950/40 sm:grid-cols-3">
                     <div>
-                        <label for="report-status-filter" class="text-xs font-semibold text-stone-700 dark:text-stone-300">
+                        <label for="report-status-filter" class="text-[13px] font-semibold text-stone-700 dark:text-stone-300">
                             Status
                         </label>
                         <select
@@ -222,7 +162,7 @@
                     </div>
 
                     <div>
-                        <label for="report-category-filter" class="text-xs font-semibold text-stone-700 dark:text-stone-300">
+                        <label for="report-category-filter" class="text-[13px] font-semibold text-stone-700 dark:text-stone-300">
                             Kategori
                         </label>
                         <select
@@ -238,7 +178,7 @@
                     </div>
 
                     <div>
-                        <label for="report-sort" class="text-xs font-semibold text-stone-700 dark:text-stone-300">
+                        <label for="report-sort" class="text-[13px] font-semibold text-stone-700 dark:text-stone-300">
                             Urutkan
                         </label>
                         <select
@@ -285,8 +225,8 @@
                         <div class="mt-5 flex flex-wrap justify-center gap-2">
                             <button
                                 type="button"
-                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ft-green px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-ft-green-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70"
-                                x-on:click="requestReport()"
+                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ft-green px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-ft-green-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ft-brick/40"
+                                x-on:click="openReportForm()"
                             >
                                 Laporkan di sini
                             </button>
@@ -334,7 +274,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l1.5-2h7L17 7h3a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"></path>
                                                     <circle cx="12" cy="12.5" r="3.5"></circle>
                                                 </svg>
-                                                <span class="text-[0.6rem] font-medium">Tanpa foto</span>
+                                                <span class="text-[13px] font-medium">Tanpa foto</span>
                                             </div>
                                         </template>
                                     </div>
@@ -348,7 +288,7 @@
                                                     tabindex="-1"
                                                     x-text="report.fasilitas"
                                                 ></h3>
-                                                <p class="mt-1 text-xs font-medium uppercase tracking-wide text-stone-600 dark:text-stone-400" x-text="report.kategori"></p>
+                                                <p class="mt-1 text-[13px] font-medium tracking-wide text-stone-600 dark:text-stone-400" x-text="report.kategori"></p>
                                             </div>
                                             <span class="status-badge" x-bind:data-status="report.status" x-text="report.status"></span>
                                         </div>
@@ -364,7 +304,7 @@
                                             </div>
                                         </dl>
 
-                                        <p class="mt-2 inline-flex items-center gap-1.5 text-xs text-stone-600 dark:text-stone-400">
+                                        <p class="mt-2 inline-flex items-center gap-1.5 text-[13px] text-stone-600 dark:text-stone-400">
                                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                                                 <circle cx="12" cy="12" r="9"></circle>
                                                 <path stroke-linecap="round" d="M12 7v5l3 2"></path>
@@ -384,7 +324,7 @@
                                     x-show="report.tindakan_admin"
                                     class="mt-3 rounded-xl border border-emerald-600/15 bg-emerald-50/80 px-3 py-2.5 dark:border-emerald-400/20 dark:bg-emerald-950/30"
                                 >
-                                    <p class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-emerald-800 dark:text-emerald-300">
+                                    <p class="text-[13px] font-semibold tracking-[0.1em] text-emerald-800 dark:text-emerald-300">
                                         Tindakan admin (staf TU)
                                     </p>
                                     <p class="mt-1 text-sm leading-relaxed text-emerald-950 dark:text-emerald-100" x-text="report.tindakan_admin"></p>
@@ -392,7 +332,7 @@
 
                                 <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-stone-200/80 pt-3 dark:border-white/10">
                                     <div class="inline-flex items-center gap-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-stone-600 dark:text-stone-400">Urgensi</span>
+                                        <span class="text-[13px] font-semibold tracking-wide text-stone-600 dark:text-stone-400">Urgensi</span>
                                         <span class="inline-flex min-w-9 items-center justify-center rounded-full bg-rose-100 px-2.5 py-1 text-sm font-bold text-rose-800 dark:bg-rose-950/60 dark:text-rose-200" x-text="report.nilai_urgensi"></span>
                                     </div>
 
@@ -425,7 +365,7 @@
                     </template>
                 </ul>
 
-                <p class="mt-4 text-xs leading-relaxed text-stone-600 dark:text-stone-400">
+                <p class="mt-4 text-[13px] leading-relaxed text-stone-600 dark:text-stone-400">
                     Data laporan masih contoh. Laporan baru hanya tersimpan di memori sampai halaman dimuat ulang. Rating urgensi pada tahap ini juga simulasi tampilan; validasi sebenarnya dibuat di server saat backend tersedia.
                 </p>
             </div>
@@ -472,11 +412,11 @@
                 aria-modal="true"
                 aria-labelledby="report-form-title"
                 aria-describedby="report-form-description"
-                class="relative w-full max-w-2xl overflow-hidden rounded-t-3xl border border-stone-200 bg-ft-cream shadow-2xl dark:border-white/10 dark:bg-stone-900 sm:rounded-3xl"
+                class="relative w-full max-w-2xl overflow-hidden rounded-t-3xl border border-stone-200 bg-white shadow-2xl dark:border-white/10 dark:bg-stone-900 sm:rounded-3xl"
             >
                 <div class="max-h-[92vh] overflow-y-auto p-5 sm:p-7">
                     <div>
-                        <p class="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ft-green/80 dark:text-emerald-300/90">
+                        <p class="text-[13px] font-semibold tracking-[0.12em] text-ft-green/80 dark:text-emerald-300/90">
                             Laporan fasilitas
                         </p>
                         <h2 id="report-form-title" class="mt-1 font-serif text-2xl text-ft-green dark:text-emerald-300 sm:text-3xl">
@@ -502,12 +442,12 @@
                                     aria-readonly="true"
                                     class="field-control"
                                 >
-                                <p class="mt-1 text-xs text-stone-600 dark:text-stone-400">
-                                    Terisi otomatis dari area yang dipilih pada peta.
+                                <p class="mt-1 text-[13px] text-stone-600 dark:text-stone-400">
+                                    Terisi otomatis dari area yang dipilih pada pilihan lokasi.
                                 </p>
                             </div>
 
-                            <div>
+                            <div x-show="!isAreaLocation">
                                 <label for="report-floor" class="field-label">
                                     Lantai
                                     <span class="text-red-700 dark:text-red-300" aria-hidden="true">*</span>
@@ -531,7 +471,7 @@
 
                             <div>
                                 <label for="report-room" class="field-label">
-                                    Ruangan
+                                    <span x-text="isAreaLocation ? 'Lokasi' : 'Ruangan'">Ruangan</span>
                                     <span class="text-red-700 dark:text-red-300" aria-hidden="true">*</span>
                                     <span class="sr-only"> (wajib)</span>
                                 </label>
@@ -544,12 +484,30 @@
                                     x-bind:aria-invalid="formErrors.ruangan ? 'true' : 'false'"
                                     aria-describedby="report-room-hint report-room-error"
                                 >
-                                    <option value="">Pilih ruangan</option>
+                                    <option value="" x-text="isAreaLocation ? 'Pilih lokasi' : 'Pilih ruangan'">Pilih ruangan</option>
                                     <template x-for="room in roomOptions" :key="room">
                                         <option :value="room" x-text="room"></option>
                                     </template>
+                                    <option x-show="isAreaLocation" x-bind:value="roomOtherValue">Lainnya</option>
                                 </select>
-                                <p id="report-room-hint" x-show="!form.lantai" class="mt-1 text-xs text-stone-600 dark:text-stone-400">
+                                <div x-show="isAreaLocation && form.ruangan === roomOtherValue" x-cloak class="mt-2">
+                                    <label for="report-room-other" class="sr-only">Nama lokasi lainnya</label>
+                                    <input
+                                        id="report-room-other"
+                                        type="text"
+                                        maxlength="100"
+                                        x-model="form.ruanganLainnya"
+                                        x-on:input="clearFormError('ruangan')"
+                                        class="field-control"
+                                        placeholder="Tulis nama lokasi, misalnya parkiran belakang"
+                                        x-bind:aria-invalid="formErrors.ruangan ? 'true' : 'false'"
+                                        aria-describedby="report-room-other-hint report-room-error"
+                                    >
+                                    <p id="report-room-other-hint" class="mt-1 text-[13px] text-stone-600 dark:text-stone-400">
+                                        Tulis nama lokasi jika tidak ada di daftar.
+                                    </p>
+                                </div>
+                                <p id="report-room-hint" x-show="!form.lantai && !isAreaLocation" class="mt-1 text-[13px] text-stone-600 dark:text-stone-400">
                                     Pilih lantai dulu untuk melihat pilihan ruangan.
                                 </p>
                                 <p id="report-room-error" x-show="formErrors.ruangan" x-cloak class="field-error" x-text="formErrors.ruangan" role="alert"></p>
@@ -577,7 +535,7 @@
                                 <p id="report-category-error" x-show="formErrors.kategori" x-cloak class="field-error" x-text="formErrors.kategori" role="alert"></p>
                             </div>
 
-                            <div>
+                            <div x-show="!isAreaLocation">
                                 <label for="report-facility" class="field-label">
                                     Fasilitas
                                     <span class="text-red-700 dark:text-red-300" aria-hidden="true">*</span>
@@ -597,7 +555,7 @@
                                         <option :value="facility" x-text="facility"></option>
                                     </template>
                                 </select>
-                                <p id="report-facility-hint" x-show="!form.kategori" class="mt-1 text-xs text-stone-600 dark:text-stone-400">
+                                <p id="report-facility-hint" x-show="!form.kategori" class="mt-1 text-[13px] text-stone-600 dark:text-stone-400">
                                     Pilih kategori dulu untuk melihat pilihan fasilitas.
                                 </p>
                                 <p id="report-facility-error" x-show="formErrors.fasilitas" x-cloak class="field-error" x-text="formErrors.fasilitas" role="alert"></p>
@@ -619,7 +577,7 @@
                                         <p class="font-semibold">Laporan serupa sudah ada</p>
                                         <p class="mt-1 text-sm leading-relaxed">
                                             <span x-text="duplicateReports.length"></span>
-                                            laporan aktif dengan ruangan dan fasilitas yang sama. Beri urgensi pada laporan yang sudah ada jika masalahnya sama.
+                                            laporan aktif dengan <span x-text="isAreaLocation ? 'lokasi' : 'ruangan'"></span> dan fasilitas yang sama. Beri urgensi pada laporan yang sudah ada jika masalahnya sama.
                                         </p>
                                     </div>
                                 </div>
@@ -629,12 +587,12 @@
                                         <li class="rounded-xl border border-amber-500/25 bg-white/70 p-3 dark:border-amber-300/20 dark:bg-stone-900/60">
                                             <p class="text-sm font-semibold" x-text="duplicate.fasilitas + ' · ' + duplicate.ruangan"></p>
                                             <p
-                                                class="mt-1 text-xs text-amber-900/80 dark:text-amber-100/80"
+                                                class="mt-1 text-[13px] text-amber-900/80 dark:text-amber-100/80"
                                                 x-text="'Status ' + duplicate.status + ' · urgensi ' + duplicate.nilai_urgensi + ' · ' + formatDate(duplicate.dibuat_pada)"
                                             ></p>
                                             <button
                                                 type="button"
-                                                class="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-amber-500 px-3 py-2 text-xs font-semibold text-amber-950 shadow-sm transition hover:bg-amber-400 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 sm:w-auto"
+                                                class="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-ft-brick px-3 py-2 text-[13px] font-semibold text-white transition hover:bg-ft-brick-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ft-brick/40 sm:w-auto"
                                                 x-on:click="goToDuplicate(duplicate)"
                                                 x-bind:aria-label="'Beri urgensi pada laporan ' + duplicate.fasilitas + ' di ' + duplicate.ruangan"
                                             >
@@ -644,7 +602,7 @@
                                     </template>
                                 </ul>
 
-                                <p class="mt-3 text-xs leading-relaxed text-amber-900/80 dark:text-amber-100/80">
+                                <p class="mt-3 text-[13px] leading-relaxed text-amber-900/80 dark:text-amber-100/80">
                                     Kamu tetap boleh melanjutkan membuat laporan baru.
                                 </p>
                             </div>
@@ -652,21 +610,32 @@
                             <div class="sm:col-span-2">
                                 <div class="flex items-baseline justify-between gap-2">
                                     <label for="report-description" class="field-label">
-                                        Deskripsi <span class="font-normal text-stone-600 dark:text-stone-400">(opsional)</span>
+                                        Deskripsi
+                                        <span x-show="!isAreaLocation" class="font-normal text-stone-600 dark:text-stone-400">(opsional)</span>
+                                        <span x-show="isAreaLocation" class="text-red-700 dark:text-red-300" aria-hidden="true">*</span>
+                                        <span x-show="isAreaLocation" class="sr-only"> (wajib)</span>
                                     </label>
-                                    <span class="text-xs text-stone-600 dark:text-stone-400" x-text="form.deskripsi.length + '/500'"></span>
+                                    <span class="text-[13px] text-stone-600 dark:text-stone-400" x-text="form.deskripsi.length + '/500'"></span>
                                 </div>
                                 <textarea
                                     id="report-description"
                                     rows="4"
                                     maxlength="500"
                                     x-model="form.deskripsi"
+                                    x-on:input="clearFormError('deskripsi')"
                                     class="field-control resize-y"
-                                    aria-describedby="report-description-hint"
+                                    x-bind:aria-invalid="formErrors.deskripsi ? 'true' : 'false'"
+                                    x-bind:aria-required="isAreaLocation ? 'true' : 'false'"
+                                    aria-describedby="report-description-hint report-description-note report-description-error"
                                 ></textarea>
-                                <p id="report-description-hint" class="mt-1 text-xs text-stone-600 dark:text-stone-400">
+                                <p id="report-description-hint" x-show="!isAreaLocation" class="mt-1 text-[13px] text-stone-600 dark:text-stone-400">
                                     Jelaskan kerusakan atau kekurangan yang ditemukan.
                                 </p>
+                                <p id="report-description-note" x-show="isAreaLocation" x-cloak class="mt-2 rounded-xl border border-amber-500/30 bg-amber-50 p-3 text-[13px] leading-relaxed text-amber-950 dark:border-amber-400/30 dark:bg-amber-950/40 dark:text-amber-100">
+                                    <span class="font-semibold">Catatan:</span>
+                                    jelaskan kondisi sedetail mungkin — apa yang rusak, di mana persisnya, sejak kapan, dan dampaknya. Laporan yang jelas lebih cepat diproses.
+                                </p>
+                                <p id="report-description-error" x-show="formErrors.deskripsi" x-cloak class="field-error" x-text="formErrors.deskripsi" role="alert"></p>
                             </div>
 
                             <div class="sm:col-span-2">
@@ -679,14 +648,14 @@
                                     id="report-photo"
                                     x-ref="photoInput"
                                     type="file"
-                                    accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+                                    accept="image/jpeg,.jpg,.jpeg"
                                     x-on:change="handlePhoto($event)"
                                     class="mt-1 block min-h-11 w-full cursor-pointer rounded-xl border border-stone-300 bg-white text-sm text-stone-700 shadow-sm file:mr-3 file:cursor-pointer file:rounded-l-xl file:border-0 file:bg-ft-green file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-white hover:file:bg-ft-green-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:file:bg-emerald-700 dark:hover:file:bg-emerald-600"
                                     x-bind:aria-invalid="formErrors.foto ? 'true' : 'false'"
                                     aria-describedby="report-photo-hint report-photo-error"
                                 >
-                                <p id="report-photo-hint" class="mt-1 text-xs text-stone-600 dark:text-stone-400">
-                                    JPG, PNG, atau WEBP. Maksimal 5 MB sebelum dikecilkan; foto otomatis diperkecil di browser.
+                                <p id="report-photo-hint" class="mt-1 text-[13px] text-stone-600 dark:text-stone-400">
+                                    JPG atau JPEG, maksimal 2 MB. Foto otomatis diperkecil di browser.
                                 </p>
                                 <p id="report-photo-error" x-show="formErrors.foto" x-cloak class="field-error" x-text="formErrors.foto" role="alert"></p>
 
@@ -702,10 +671,10 @@
                                     >
                                     <div class="min-w-0">
                                         <p class="text-sm font-semibold text-stone-800 dark:text-stone-100">Foto siap diunggah</p>
-                                        <p class="mt-1 truncate text-xs text-stone-600 dark:text-stone-400" x-text="form.fotoName"></p>
+                                        <p class="mt-1 truncate text-[13px] text-stone-600 dark:text-stone-400" x-text="form.fotoName"></p>
                                         <button
                                             type="button"
-                                            class="mt-2 inline-flex min-h-11 items-center justify-center rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold text-stone-700 shadow-sm transition hover:bg-stone-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
+                                            class="mt-2 inline-flex min-h-11 items-center justify-center rounded-full border border-stone-300 bg-white px-4 py-2 text-[13px] font-semibold text-stone-700 shadow-sm transition hover:bg-stone-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
                                             x-on:click="$refs.photoInput.click()"
                                         >
                                             Ganti foto
@@ -738,8 +707,8 @@
         </div>
     </div>
 
-    <footer class="mx-auto max-w-6xl px-4 pb-10 text-xs text-stone-600 dark:text-stone-400 sm:px-6 lg:px-8">
-        Prototipe Fase 1 · Data laporan dan lokasi masih contoh · Backend dan foto asli menyusul.
+    <footer class="mx-auto max-w-6xl px-4 pb-10 text-[13px] text-stone-600 dark:text-stone-400 sm:px-6 lg:px-8">
+        Prototipe Fase 1 · Data laporan dan lokasi masih contoh.
     </footer>
 </body>
 </html>

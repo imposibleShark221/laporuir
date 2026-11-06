@@ -21,6 +21,8 @@ class HomeController extends Controller
                     ...$area,
                     'kode' => $building['kode'] ?? $area['building_id'],
                     'nama' => $building['nama'] ?? $area['label'],
+                    'image' => ! empty($area['image']) ? asset($area['image']) : null,
+                    'foto_posisi' => $area['foto_posisi'] ?? 'center',
                 ];
             })
             ->values()

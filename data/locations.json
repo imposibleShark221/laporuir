@@ -7,13 +7,13 @@
     "background_image": null,
     "unit": "percent",
     "aspect_ratio": "4:3",
-    "catatan": "Posisi area dalam persen terhadap gambar besar. Ganti background_image dan sesuaikan posisi saat foto/denah asli tersedia.",
+    "catatan": "Posisi area dalam persen terhadap kontainer lama. Halaman utama kini memakai grid dua kolom; foto tiap area diambil dari public/images/lokasi dan posisi pemotongannya diatur lewat foto_posisi (nilai CSS object-position, default center). Sesuaikan saat denah asli tersedia.",
     "areas": [
-      { "building_id": "A", "label": "Gedung A", "x": 3, "y": 4, "width": 44, "height": 36, "sample": true },
-      { "building_id": "B", "label": "Gedung B", "x": 53, "y": 4, "width": 44, "height": 36, "sample": true },
-      { "building_id": "C", "label": "Gedung C", "x": 3, "y": 42, "width": 44, "height": 36, "sample": true },
-      { "building_id": "D", "label": "Gedung D", "x": 53, "y": 42, "width": 44, "height": 36, "sample": true },
-      { "building_id": "AREA-FT", "label": "Area Sekitar FT", "x": 3, "y": 80, "width": 94, "height": 16, "sample": true }
+      { "building_id": "A", "label": "Gedung A", "x": 3, "y": 4, "width": 44, "height": 36, "image": "images/lokasi/GedungA.jpeg", "foto_posisi": "center", "sample": true },
+      { "building_id": "B", "label": "Gedung B", "x": 53, "y": 4, "width": 44, "height": 36, "image": "images/lokasi/GedungB.jpeg", "foto_posisi": "center", "sample": true },
+      { "building_id": "C", "label": "Gedung C", "x": 3, "y": 42, "width": 44, "height": 36, "image": "images/lokasi/GedungC.jpeg", "foto_posisi": "center", "sample": true },
+      { "building_id": "D", "label": "Gedung D", "x": 53, "y": 42, "width": 44, "height": 36, "image": "images/lokasi/GedungD.jpeg", "foto_posisi": "center", "sample": true },
+      { "building_id": "AREA-FT", "label": "Area Sekitar FT", "x": 3, "y": 80, "width": 94, "height": 16, "image": "images/lokasi/AreaSekitarFT.jpeg", "foto_posisi": "center", "sample": true }
     ]
   },
   "buildings": [

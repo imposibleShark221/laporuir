@@ -1,0 +1,196 @@
+PRD: Sistem Pelaporan Fasilitas Fakultas Teknik UIR
+Dokumen ini menjelaskan konsep, aturan, dan kebutuhan produk agar agent atau developer yang mengerjakan proyek ini memahami apa yang dibangun dan mengapa.
+Versi: 0.1 (draf awal) · Bahasa antarmuka: Indonesia
+1. Ringkasan
+Website tempat mahasiswa dan dosen Fakultas Teknik Universitas Islam Riau (FT UIR) melaporkan kerusakan atau kekurangan fasilitas kampus. Admin fakultas melihat laporan, menentukan tindakan, dan memperbarui statusnya.
+Ciri utama produk:
+• Halaman utama berupa peta interaktif layar penuh FT UIR. Pengguna memilih lokasi lewat peta, bukan lewat menu.
+• Pengguna melihat laporan yang sudah ada sebelum membuat laporan baru, supaya tidak ada laporan ganda.
+• Pengguna dapat menaikkan tingkat urgensi laporan yang sudah ada, tanpa membuat laporan baru.
+• Admin menentukan status dan tindakan untuk tiap laporan.
+2. Latar belakang dan masalah
+Saat ini belum ada tempat terpusat untuk melaporkan masalah fasilitas di FT. Akibatnya:
+• Laporan tersebar dan sulit dilacak.
+• Masalah yang sama dilaporkan berulang kali oleh orang berbeda.
+• Admin sulit menentukan prioritas karena tidak ada indikator seberapa mendesak suatu masalah.
+• Pelapor tidak tahu apakah laporannya sudah ditindaklanjuti.
+3. Tujuan
+1. Memusatkan semua laporan fasilitas FT UIR di satu sistem.
+2. Menekan laporan ganda dengan menampilkan laporan yang sudah ada sebelum pelapor membuat yang baru.
+3. Membantu admin menentukan prioritas lewat nilai urgensi dari banyak pengguna.
+4. Memberi transparansi status dan tindakan kepada pelapor.
+Bukan tujuan (di luar cakupan)
+• Fakultas lain atau kampus UIR secara keseluruhan. Cakupan hanya Fakultas Teknik.
+• Pembayaran, manajemen aset, inventaris, atau penjadwalan teknisi.
+• Notifikasi email, WhatsApp, atau push (bisa menjadi fase berikutnya).
+• Login dan register: ditunda pada fase pertama (lihat bagian 11).
+4. Pengguna dan peran
+Peran
+Hak akses
+Mahasiswa
+Melihat peta dan laporan, membuat laporan, memberi rating urgensi
+Dosen
+Sama dengan mahasiswa
+Admin
+Semua hak di atas, ditambah mengubah status laporan dan mengisi tindakan yang diambil
+Sistem hanya dipakai tiga peran di atas. Tidak ada pengguna publik.
+5. Alur pengguna utama
+5.1 Melapor
+1. Pengguna membuka halaman utama dan melihat peta FT.
+2. Pengguna klik Gedung A, B, C, D, atau Area Sekitar FT.
+3. Di bawah peta muncul daftar laporan untuk lokasi itu.
+4. Pengguna memeriksa apakah masalahnya sudah dilaporkan.
+    ◦ Sudah ada: pengguna menekan tombol urgensi pada laporan tersebut.
+    ◦ Belum ada: pengguna menekan Buat laporan.
+5. Pengguna mengisi form (bagian 7.3) dan mengirim.
+6. Laporan muncul di daftar dengan status Baru.
+5.2 Admin menindaklanjuti
+1. Admin membuka lokasi dan melihat laporan, diurutkan menurut urgensi.
+2. Admin mengubah status (Baru, Diproses, Selesai) dan menulis tindakan yang diambil.
+3. Perubahan langsung terlihat oleh semua pengguna.
+6. Lokasi
+Lima lokasi yang bisa dipilih:
+• Gedung A
+• Gedung B
+• Gedung C
+• Gedung D
+• Area Sekitar FT (di luar gedung: parkiran, kantin, musala, taman, selasar, toilet umum, lapangan, dan sejenisnya)
+Struktur data lokasi: Gedung → Lantai → Ruangan. Untuk Area Sekitar FT tidak ada lantai, jadi dipakai satu lantai khusus bernama "Area luar" yang berisi daftar area.
+Catatan: daftar lantai dan ruangan masih data contoh. Daftar asli harus diisi pemilik proyek. Data ini harus disimpan sebagai data konfigurasi (bukan hardcode di logika), agar mudah diubah.
+7. Kebutuhan fungsional
+7.1 Halaman utama dan peta (prioritas utama)
+• Peta denah 2D (SVG) memenuhi sebagian besar layar.
+• Lima area bisa diklik, di-hover, dan difokus dengan keyboard.
+• Satu lokasi terpilih pada satu waktu, dengan penanda visual yang jelas.
+• Tiap gedung menampilkan jumlah laporan aktif (status selain Selesai).
+• Posisi gedung disimpan sebagai data agar denah asli mudah menggantikan denah sementara.
+• Tombol Buat laporan tersedia di header. Jika belum ada lokasi dipilih, sistem meminta pengguna memilih lokasi di peta dulu.
+7.2 Daftar laporan per lokasi
+Muncul di bawah peta setelah lokasi dipilih.
+Setiap item menampilkan: foto, fasilitas, ruangan, lantai, kategori, tanggal, status, deskripsi (jika ada), tindakan admin (jika ada), dan nilai urgensi.
+Fitur daftar:
+• Filter status: Baru, Diproses, Selesai.
+• Filter kategori.
+• Urutan: paling urgent (default) atau terbaru.
+• Tombol Ini juga urgent pada setiap laporan.
+• Keadaan kosong: pesan yang mengarahkan pengguna membuat laporan.
+7.3 Form membuat laporan
+Field
+Tipe
+Wajib
+Aturan
+Gedung
+Teks (read-only)
+Ya
+Terisi otomatis dari lokasi yang dipilih di peta
+Lantai
+Dropdown
+Ya
+Pilihan sesuai gedung
+Ruangan
+Dropdown
+Ya
+Hanya menampilkan ruangan di lantai terpilih. Contoh: lantai 1 punya 7 ruangan, maka tampil 7 ruangan itu saja. Nonaktif sebelum lantai dipilih
+Kategori
+Dropdown
+Ya
+Listrik & Elektronik, Furniture, Bangunan, Fasilitas Umum
+Fasilitas
+Dropdown
+Ya
+Pilihan bergantung pada kategori. Nonaktif sebelum kategori dipilih
+Deskripsi
+Teks panjang
+Tidak
+Opsional
+Foto
+Unggah gambar
+Ya
+Laporan tidak bisa dikirim tanpa foto
+Contoh daftar fasilitas per kategori (dapat dikembangkan):
+• Listrik & Elektronik: TV, AC, kipas, infokus, lampu, stop kontak
+• Furniture: meja, kursi, lemari, papan tulis, rak
+• Bangunan: tembok, plafon, lantai, pintu, jendela, atap
+• Fasilitas Umum: toilet, keran air, tangga, tempat sampah, jalan atau paving, pagar
+Perilaku tambahan:
+• Peringatan duplikat: setelah ruangan dan fasilitas dipilih, jika sudah ada laporan aktif dengan kombinasi yang sama, tampilkan peringatan yang menyarankan pengguna memberi rating urgensi. Pengguna tetap boleh melanjutkan.
+• Foto diperkecil di sisi klien sebelum diunggah (sisi terpanjang sekitar 640 px).
+• Laporan baru otomatis berstatus Baru dan bernilai urgensi 1.
+7.4 Rating urgensi
+• Tombol "Ini juga urgent" menambah nilai urgensi laporan sebesar 1.
+• Satu pengguna hanya bisa menilai satu kali per laporan.
+• Laporan berstatus Selesai tidak bisa dinilai lagi.
+• Nilai urgensi dipakai untuk mengurutkan daftar.
+7.5 Fitur admin
+• Mengubah status: Baru → Diproses → Selesai.
+• Mengisi atau mengubah teks tindakan yang diambil.
+• Admin menentukan sendiri tindakan; sistem tidak menetapkannya otomatis.
+• Hanya admin yang boleh melakukan perubahan ini (saat prototipe, dipakai saklar "Mode admin (demo)" yang harus diganti dengan pembatasan peran sungguhan setelah login ada).
+8. Model data (usulan)
+Location
+• id, gedung (A, B, C, D, E), lantai, ruangan
+FacilityCategory
+• id, nama
+Facility
+• id, kategori_id, nama
+Report
+• id
+• gedung, lantai, ruangan
+• kategori, fasilitas
+• deskripsi (opsional)
+• foto (wajib; URL atau data gambar)
+• status: Baru | Diproses | Selesai
+• tindakan_admin (teks)
+• nilai_urgensi (angka, mulai dari 1)
+• dibuat_oleh, dibuat_pada, diperbarui_pada
+UrgencyVote
+• id, report_id, user_id (atau identitas perangkat), dibuat_pada
+• Aturan unik: satu pasangan (report_id, user_id)
+User (fase login)
+• id, nama, email, peran: mahasiswa | dosen | admin
+9. Kebutuhan non-fungsional
+• Responsif: nyaman di HP, karena sebagian besar pelapor akan memakai ponsel. Area sentuh minimal 44 px.
+• Aksesibilitas: navigasi keyboard, label ARIA pada gedung, fokus terlihat, warna bukan satu-satunya penanda.
+• Tema: mendukung mode terang dan gelap.
+• Performa: foto dikompres sebelum diunggah; daftar laporan dimuat per lokasi.
+• Keamanan (fase login): hanya admin yang bisa mengubah status; validasi sisi server untuk semua input, termasuk wajib foto dan satu rating per pengguna per laporan.
+10. Desain
+• Nuansa kampus Islam yang bersih dan tenang.
+• Warna: hijau tua (#0F5B3A) sebagai warna utama, hijau muda untuk gedung, latar krem keabu-abuan, amber untuk penanda peringatan.
+• Tipografi: judul serif (Georgia), isi sans-serif sistem.
+• Tanpa gradien dekoratif dan efek berlebihan. Interaksi (hover, buka form, konfirmasi) boleh bergerak halus; hormati pengaturan "reduced motion".
+• Teks antarmuka memakai bahasa sederhana. Tombol menyebut aksinya dengan jelas ("Kirim laporan", "Simpan"). Pesan galat menjelaskan apa yang salah dan cara memperbaikinya.
+11. Fase pengerjaan
+Fase 1 (sekarang): prototipe tanpa login
+• Peta interaktif, daftar laporan, form, rating urgensi, mode admin demo.
+• Data masih disimpan di browser masing-masing pengguna (belum dibagikan antar pengguna).
+Fase 2: backend dan data bersama
+• Database terpusat (usulan: Supabase atau Firebase).
+• Penyimpanan foto di storage.
+• Semua pengguna melihat data yang sama.
+Fase 3: login dan peran
+• Register dan login (mahasiswa, dosen, admin).
+• Pembatasan fitur admin berdasarkan peran.
+• Satu rating per akun per laporan.
+Fase 4: pengembangan lanjutan (opsional)
+• Notifikasi perubahan status ke pelapor.
+• Riwayat perubahan status.
+• Rekap dan statistik untuk admin.
+• Ekspor laporan.
+12. Kriteria penerimaan (fase 1)
+1. Halaman utama menampilkan peta dengan Gedung A–D dan Area Sekitar FT yang dapat diklik.
+2. Klik lokasi menampilkan daftar laporan lokasi itu di bawah peta.
+3. Form tidak bisa dikirim tanpa lantai, ruangan, kategori, fasilitas, dan foto.
+4. Dropdown ruangan hanya berisi ruangan di lantai terpilih, dan dropdown fasilitas hanya berisi fasilitas dari kategori terpilih.
+5. Kolom gedung di form terisi otomatis dari lokasi yang dipilih.
+6. Peringatan duplikat muncul jika ada laporan aktif dengan ruangan dan fasilitas yang sama.
+7. Rating urgensi menaikkan nilai sebesar 1, dan tidak bisa diberikan dua kali oleh pengguna yang sama pada laporan yang sama.
+8. Admin dapat mengubah status dan mengisi tindakan, dan perubahan tampil di daftar.
+9. Tampilan berfungsi baik di layar HP dan desktop.
+13. Pertanyaan terbuka
+• Daftar lantai dan ruangan sebenarnya di tiap gedung?
+• Apakah ada denah asli FT UIR yang bisa dijadikan dasar peta?
+• Apakah laporan boleh dikirim secara anonim, atau pelapor harus teridentifikasi (penting untuk fase login)?
+• Siapa saja yang menjadi admin, dan apakah lebih dari satu orang?
+• Apakah laporan berstatus Selesai tetap ditampilkan, atau dipindahkan ke arsip setelah beberapa waktu?
+• Apakah perlu batas jumlah laporan per pengguna per hari untuk mencegah spam?

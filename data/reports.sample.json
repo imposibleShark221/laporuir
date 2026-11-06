@@ -74,9 +74,9 @@
     },
     {
       "id": "RPT-006",
-      "gedung": "C",
+      "gedung": "A",
       "lantai": "Lantai 2",
-      "ruangan": "Ruang C.201",
+      "ruangan": "Ruang A.204",
       "kategori": "Listrik & Elektronik",
       "fasilitas": "Lampu",
       "deskripsi": null,
@@ -141,6 +141,76 @@
       "tindakan_admin": "Paving berlubang ditambal dan area sekitarnya dibersihkan.",
       "nilai_urgensi": 10,
       "dibuat_pada": "2026-10-18T08:00:00+07:00"
+    },
+    {
+      "id": "RPT-011",
+      "gedung": "A",
+      "lantai": "Lantai 1",
+      "ruangan": "Ruang A.102",
+      "kategori": "Bangunan",
+      "fasilitas": "Jendela",
+      "deskripsi": "Kaca jendela ruang A.102 retak dan sebagian lepas dari bingkai. Angin masuk dan berisiko melukai mahasiswa.",
+      "foto": null,
+      "status": "Baru",
+      "tindakan_admin": null,
+      "nilai_urgensi": 5,
+      "dibuat_pada": "2026-10-26T15:20:00+07:00"
+    },
+    {
+      "id": "RPT-012",
+      "gedung": "A",
+      "lantai": "Lantai 2",
+      "ruangan": "Ruang A.202",
+      "kategori": "Listrik & Elektronik",
+      "fasilitas": "Stop kontak",
+      "deskripsi": "Stop kontak di dekat papan tulis mengeluarkan percikan saat colokan ditarik. Perlu segera diperiksa.",
+      "foto": null,
+      "status": "Diproses",
+      "tindakan_admin": "Stop kontak diputus sementara dan teknisi dijadwalkan memeriksa jalur kabel.",
+      "nilai_urgensi": 6,
+      "dibuat_pada": "2026-10-24T09:40:00+07:00"
+    },
+    {
+      "id": "RPT-013",
+      "gedung": "B",
+      "lantai": "Lantai 1",
+      "ruangan": "Ruang B.102",
+      "kategori": "Fasilitas Umum",
+      "fasilitas": "Keran air",
+      "deskripsi": "Keran air di wastafel depan ruang B.102 bocor dan air menggenangi lantai koridor.",
+      "foto": null,
+      "status": "Baru",
+      "tindakan_admin": null,
+      "nilai_urgensi": 3,
+      "dibuat_pada": "2026-10-26T11:05:00+07:00"
+    },
+    {
+      "id": "RPT-014",
+      "gedung": "D",
+      "lantai": "Lantai 1",
+      "ruangan": "Ruang D.104",
+      "kategori": "Listrik & Elektronik",
+      "fasilitas": "Lampu",
+      "deskripsi": "Dua lampu di plafon ruang D.104 mati sehingga ruangan gelap saat perkuliahan sore.",
+      "foto": null,
+      "status": "Diproses",
+      "tindakan_admin": "Lampu pengganti sudah dipesan; sementara dipasang lampu portabel.",
+      "nilai_urgensi": 4,
+      "dibuat_pada": "2026-10-25T08:25:00+07:00"
+    },
+    {
+      "id": "RPT-015",
+      "gedung": "D",
+      "lantai": "Lantai 2",
+      "ruangan": "Ruang D.203",
+      "kategori": "Furniture",
+      "fasilitas": "Kursi",
+      "deskripsi": "Kursi di ruang D.203 goyang dan baut sandarannya lepas. Mahasiswa khawatir kursi roboh.",
+      "foto": null,
+      "status": "Selesai",
+      "tindakan_admin": "Baut diganti dan kursi sudah diuji coba aman dipakai.",
+      "nilai_urgensi": 2,
+      "dibuat_pada": "2026-10-21T17:10:00+07:00"
     }
   ]
 }

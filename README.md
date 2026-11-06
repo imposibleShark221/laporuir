@@ -8,6 +8,7 @@ Status saat ini: **Fase 1 — UI inti sudah berjalan**. Halaman utama menampilka
 
 ## Dokumentasi
 
+- Untuk agent AI: baca `SETUP_AGENT.md` sebelum menyiapkan atau menjalankan proyek.
 - `docs/PRD.md` — dokumen kebutuhan produk (sumber kebenaran, satu-satunya versi PRD).
 - `docs/PROGRESS.md` — catatan kemajuan, keputusan, dan pertanyaan yang masih terbuka.
 - `AGENTS.md` — ringkasan aturan kerja untuk agent/developer.
